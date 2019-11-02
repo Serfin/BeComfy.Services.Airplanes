@@ -11,5 +11,18 @@ namespace BeComfy.Services.Airplanes.Domain
         public int FlightsCarriedOut { get; private set; }
         public DateTime? NextFlight { get; private set; }
         public DateTime IntroductionToTheFleet { get; private set; }
+    
+        public Airplane(Guid id, IDictionary<SeatClass, int> availableSeats,
+            DateTime? nextFlight, DateTime introductionToTheFleet)
+        {
+            Id = id;
+            AvailableSeats = availableSeats;
+            FlightsCarriedOut = 0;
+            NextFlight = nextFlight;
+            IntroductionToTheFleet = introductionToTheFleet;
+        }
+
+        public void IncreaseFlighitsCarriedOut() 
+            => FlightsCarriedOut++;
     }
 }
