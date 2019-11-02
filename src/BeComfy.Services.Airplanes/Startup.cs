@@ -3,7 +3,9 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BeComfy.Common.CqrsFlow;
+using BeComfy.Common.EFCore;
 using BeComfy.Common.RabbitMq;
+using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +29,7 @@ namespace BeComfy.Services.Airplanes
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddEFCoreContext<AirplanesContext>();
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
