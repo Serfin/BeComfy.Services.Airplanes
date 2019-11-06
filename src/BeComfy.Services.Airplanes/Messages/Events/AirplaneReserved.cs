@@ -1,19 +1,17 @@
 using System;
 using BeComfy.Common.CqrsFlow;
-using BeComfy.Common.Messages;
 using Newtonsoft.Json;
 
 namespace BeComfy.Services.Airplanes.Messages.Events
 {
-    [MessageNamespace("flights")]
-    public class FlightCreated : IEvent
+    public class AirplaneReserved : IEvent
     {
         public Guid Id { get; set; }
         public DateTime FlightStart { get; set; }
         public DateTime FlightEnd { get; set; }
         
         [JsonConstructor]
-        public FlightCreated(Guid id, DateTime flightStart, DateTime flightEnd)
+        public AirplaneReserved(Guid id, DateTime flightStart, DateTime flightEnd)
         {
             Id = id;
             FlightStart = flightStart;
