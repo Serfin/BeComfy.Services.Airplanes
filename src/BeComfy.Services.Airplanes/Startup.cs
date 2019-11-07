@@ -6,6 +6,7 @@ using BeComfy.Common.CqrsFlow;
 using BeComfy.Common.EFCore;
 using BeComfy.Common.RabbitMq;
 using BeComfy.Services.Airplanes.EF;
+using BeComfy.Services.Airplanes.Messages.Commands;
 using BeComfy.Services.Airplanes.Messages.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -60,6 +61,7 @@ namespace BeComfy.Services.Airplanes
             app.UseHttpsRedirection();
             app.UseMvc();
             app.UseRabbitMq()
+                .SubscribeCommand<CreateAirplane>()
                 .SubscribeEvent<FlightCreated>(@namespace: "flights");
         }
     }

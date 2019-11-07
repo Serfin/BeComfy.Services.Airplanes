@@ -49,7 +49,7 @@ namespace BeComfy.Services.Airplanes.Domain
 
         public void SetNextFlight(DateTime? flightStart)
         {
-            if (flightStart.HasValue && flightStart < FlightEnd)
+            if (flightStart.HasValue)
             {
                 NextFlight = flightStart;
             }
@@ -63,7 +63,7 @@ namespace BeComfy.Services.Airplanes.Domain
 
         public void SetFlightEnd(DateTime? flightEnd)
         {
-            if (flightEnd.HasValue && flightEnd > NextFlight)
+            if (flightEnd.HasValue)
             {
                 FlightEnd = flightEnd;
             }

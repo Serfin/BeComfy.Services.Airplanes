@@ -19,11 +19,11 @@ namespace BeComfy.Services.Airplanes.EventHandlers
         }
         public async Task HandleAsync(FlightCreated @event, ICorrelationContext context)
         {
-            var airplane = await _airplanesRepository.GetAirplaneAsync(@event.Id);
+            var airplane = await _airplanesRepository.GetAirplaneAsync(@event.AirplaneId);
 
             if (airplane is null)
             {
-                throw new BeComfyException($"Airplane with id '{@event.Id}' does not exist");
+                throw new BeComfyException($"Airplane with id '{@event.AirplaneId}' does not exist");
             }
 
             airplane.IncreaseFlighitsCarriedOut();
@@ -32,7 +32,7 @@ namespace BeComfy.Services.Airplanes.EventHandlers
             airplane.SetAirplaneStatus(Domain.AirplaneStatus.Ready);
 
             await _airplanesRepository.UpdateAirplaneAsync(airplane);
-            await _busPublisher.PublishAsync(new AirplaneReserved(@event.Id, @event.FlightStart ,@event.FlightEnd), context);
+            await _busPublisher.PublishAsync(new AirplaneReserved(@event.AirplaneId, @event.FlightStart ,@event.FlightEnd), context);
         }
     }
 }
