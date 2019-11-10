@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BeComfy.Common.CqrsFlow.Dispatcher;
 using BeComfy.Services.Airplanes.Dto;
@@ -20,5 +21,8 @@ namespace BeComfy.Services.Airplanes.Controllers
         public async Task<ActionResult<AirplaneDto>> GetAsync([FromRoute] GetAirplane query)
             => Ok(await QueryAsync(query));
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<AirplaneDto>>> BrowseAsync([FromQuery] BrowseAirplanes query)
+            => Ok(await QueryAsync(query));
     }
 }

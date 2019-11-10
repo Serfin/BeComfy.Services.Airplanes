@@ -22,7 +22,7 @@ namespace BeComfy.Services.Airplanes.CommandHandlers
 
         public async Task HandleAsync(CreateAirplane command, ICorrelationContext context)
         {
-            var airplane = new Airplane(command.Id, command.AvailableSeats);
+            var airplane = new Airplane(command.Id, command.Model, command.AvailableSeats);
 
             await _airplanesRepository.AddAsync(airplane);
             await _busPublisher.PublishAsync(new AirplaneCreated(command.Id, command.Model), context);
