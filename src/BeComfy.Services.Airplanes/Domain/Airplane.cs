@@ -99,7 +99,7 @@ namespace BeComfy.Services.Airplanes.Domain
             return seatsCounter;
         }
 
-        public void IncreaseFlighitsCarriedOut() 
+        public void IncreaseFlightsCarriedOut() 
         {
             FlightsCarriedOut++;
             SetUpdateDate();

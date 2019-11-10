@@ -62,7 +62,8 @@ namespace BeComfy.Services.Airplanes
             app.UseMvc();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateAirplane>()
-                .SubscribeEvent<FlightCreated>(@namespace: "flights");
+                .SubscribeEvent<FlightCreated>(@namespace: "flights")
+                .SubscribeEvent<FlightEnded>(@namespace: "flights");
         }
     }
 }

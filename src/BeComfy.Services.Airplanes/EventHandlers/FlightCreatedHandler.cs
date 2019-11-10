@@ -26,10 +26,9 @@ namespace BeComfy.Services.Airplanes.EventHandlers
                 throw new BeComfyException($"Airplane with id '{@event.AirplaneId}' does not exist");
             }
 
-            airplane.IncreaseFlighitsCarriedOut();
             airplane.SetNextFlight(@event.FlightStart);
             airplane.SetFlightEnd(@event.FlightEnd);
-            airplane.SetAirplaneStatus(Domain.AirplaneStatus.Ready);
+            airplane.SetAirplaneStatus(Domain.AirplaneStatus.Reserved);
 
             await _airplanesRepository.UpdateAirplaneAsync(airplane);
             await _busPublisher.PublishAsync(new AirplaneReserved(@event.AirplaneId, @event.FlightStart ,@event.FlightEnd), context);
