@@ -8,17 +8,20 @@ namespace BeComfy.Services.Airplanes.Domain
     public class Airplane
     {
         public Guid Id { get; private set; }
+        public string Model { get; private set; }   
         public IDictionary<SeatClass, int> AvailableSeats { get; private set; }
-        public AirplaneStatus AirplaneStatus { get; set; }
+        public AirplaneStatus AirplaneStatus { get; private set; }
         public int FlightsCarriedOut { get; private set; }
         public DateTime? NextFlight { get; private set; }
         public DateTime? FlightEnd { get; private set; }
         public DateTime IntroductionToTheFleet { get; private set; }
         public DateTime UpdatedAt { get; private set; }
     
-        public Airplane(Guid id, IDictionary<SeatClass, int> availableSeats)
+        public Airplane(Guid id, string model, 
+            IDictionary<SeatClass, int> availableSeats)
         {
             Id = id;
+            SetAirplaneModel(model);
             SetAvaiableSeats(availableSeats);
             AirplaneStatus = AirplaneStatus.Ready;
             FlightsCarriedOut = 0;
@@ -26,6 +29,16 @@ namespace BeComfy.Services.Airplanes.Domain
             FlightEnd = DateTime.MinValue;
             IntroductionToTheFleet = DateTime.UtcNow;
             UpdatedAt = DateTime.MinValue;
+        }
+
+        private void SetAirplaneModel(string model)
+        {
+            if (string.IsNullOrWhiteSpace(model) || model.Length == 0)
+            {
+                throw new BeComfyDomainException("Airplane model cannot be null or empty");
+            }
+
+            Model = model;
         }
 
         private void SetAvaiableSeats(IDictionary<SeatClass, int> availableSeats)
