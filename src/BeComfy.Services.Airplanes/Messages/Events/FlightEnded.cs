@@ -8,12 +8,12 @@ namespace BeComfy.Services.Airplanes.Messages.Events
     [MessageNamespace("flights")]
     public class FlightEnded : IEvent
     {
-        public Guid Id { get; }
-
+        public Guid PlaneId { get; }
+        
         [JsonConstructor]
-        public FlightEnded(Guid id)
+        public FlightEnded(Guid planeId)
         {
-            Id = id;
+            PlaneId = planeId;
         }
     }
 }

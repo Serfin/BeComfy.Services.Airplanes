@@ -18,11 +18,11 @@ namespace BeComfy.Services.Airplanes.EventHandlers
         }
         public async Task HandleAsync(FlightEnded @event, ICorrelationContext context)
         {
-            var airplane = await _airplanesRepository.GetAirplaneAsync(@event.Id);
+            var airplane = await _airplanesRepository.GetAirplaneAsync(@event.PlaneId);
 
             if (airplane is null)
             {
-                throw new BeComfyException($"Airplane with id '{@event.Id}' does not exist");
+                throw new BeComfyException($"Airplane with id '{@event.PlaneId}' does not exist");
             }
 
             airplane.IncreaseFlightsCarriedOut();
