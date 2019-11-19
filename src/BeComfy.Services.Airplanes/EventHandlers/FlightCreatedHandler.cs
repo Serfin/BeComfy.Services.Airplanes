@@ -31,7 +31,6 @@ namespace BeComfy.Services.Airplanes.EventHandlers
             airplane.SetAirplaneStatus(Domain.AirplaneStatus.Reserved);
 
             await _airplanesRepository.UpdateAirplaneAsync(airplane);
-            //await _busPublisher.PublishAsync(new AirplaneReserved(@event.AirplaneId, @event.FlightStart ,@event.FlightEnd), context);
         }
     }
 }

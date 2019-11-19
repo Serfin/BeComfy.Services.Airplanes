@@ -4,6 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BeComfy.Common.CqrsFlow;
 using BeComfy.Common.EFCore;
+using BeComfy.Common.Jaeger;
 using BeComfy.Common.RabbitMq;
 using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Commands;
@@ -31,6 +32,7 @@ namespace BeComfy.Services.Airplanes
             services.AddControllers()
                 .AddNewtonsoftJson();
 
+            services.AddJaeger();
             services.AddEFCoreContext<AirplanesContext>();
 
             var builder = new ContainerBuilder();
