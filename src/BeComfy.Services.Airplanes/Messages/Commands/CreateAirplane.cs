@@ -8,9 +8,9 @@ namespace BeComfy.Services.Airplanes.Messages.Commands
 {
     public class CreateAirplane : ICommand
     {
-        public Guid Id { get; set; }
-        public string Model { get; set; }
-        public IDictionary<SeatClass, int> AvailableSeats { get; set; }
+        public Guid Id { get; }
+        public string Model { get; }
+        public IDictionary<SeatClass, int> AvailableSeats { get; }
 
         [JsonConstructor]
         public CreateAirplane(Guid id, string model, IDictionary<SeatClass, int> availableSeats)

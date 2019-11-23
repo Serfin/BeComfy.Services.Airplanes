@@ -6,9 +6,9 @@ namespace BeComfy.Services.Airplanes.Messages.Commands
 {
     public class ReserveAirplane : ICommand
     {
-        public Guid Id { get; set; }
-        public DateTime FlightStart { get; set; }
-        public DateTime FlightEnd { get; set; }
+        public Guid Id { get; }
+        public DateTime FlightStart { get; }
+        public DateTime FlightEnd { get; }
 
         [JsonConstructor]
         public ReserveAirplane(Guid id, DateTime flightStart, DateTime flightEnd)
