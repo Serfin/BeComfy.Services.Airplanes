@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BeComfy.Common.CqrsFlow;
+using BeComfy.Services.Airplanes.Domain;
 using BeComfy.Services.Airplanes.Dto;
 
 namespace BeComfy.Services.Airplanes.Queries
@@ -8,5 +9,6 @@ namespace BeComfy.Services.Airplanes.Queries
     {
         public int Page { get; set; }
         public int PageSize { get; set; }
+        public AirplaneStatus Status { get; set; }
     }
 }

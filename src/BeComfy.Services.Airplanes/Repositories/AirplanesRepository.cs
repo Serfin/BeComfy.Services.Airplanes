@@ -23,21 +23,24 @@ namespace BeComfy.Services.Airplanes.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Airplane>> BrowseAirplaneAsync(int pageSize, int page)
-            => await _context.Airplanes.OrderBy(x => x.FlightsCarriedOut).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
-
-        public async Task DeleteAirplaneAsync(Guid id)
+        public async Task<IEnumerable<Airplane>> BrowseAsync(int pageSize, int page, AirplaneStatus status)
+            => await _context.Airplanes
+                .OrderBy(x => x.FlightsCarriedOut)
+                .Where(y => y.AirplaneStatus == status)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize).ToListAsync();
+        
+        public async Task DeleteAsync(Guid id)
         {
-            var airplane = await GetAirplaneAsync(id);
+            var airplane = await GetAsync(id);
             _context.Remove(airplane);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Airplane> GetAirplaneAsync(Guid id)
+        public async Task<Airplane> GetAsync(Guid id)
             => await _context.Airplanes.FindAsync(id);
 
-        public async Task UpdateAirplaneAsync(Airplane airplane)
+        public async Task UpdateAsync(Airplane airplane)
         {
             _context.Update(airplane);
             await _context.SaveChangesAsync();

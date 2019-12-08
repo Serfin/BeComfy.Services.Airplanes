@@ -17,7 +17,7 @@ namespace BeComfy.Services.Airplanes.QueryHandlers
 
         public async Task<AirplaneDto> HandleAsync(GetAirplane query)
         {
-            var airplane = await _repository.GetAirplaneAsync(query.Id);
+            var airplane = await _repository.GetAsync(query.Id);
 
             if (airplane != null)
             {

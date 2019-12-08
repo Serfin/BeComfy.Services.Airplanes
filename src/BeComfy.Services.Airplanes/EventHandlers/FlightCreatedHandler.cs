@@ -19,7 +19,7 @@ namespace BeComfy.Services.Airplanes.EventHandlers
         }
         public async Task HandleAsync(FlightCreated @event, ICorrelationContext context)
         {
-            var airplane = await _airplanesRepository.GetAirplaneAsync(@event.AirplaneId);
+            var airplane = await _airplanesRepository.GetAsync(@event.AirplaneId);
 
             if (airplane is null)
             {
@@ -30,7 +30,7 @@ namespace BeComfy.Services.Airplanes.EventHandlers
             airplane.SetFlightEnd(@event.FlightEnd);
             airplane.SetAirplaneStatus(Domain.AirplaneStatus.Reserved);
 
-            await _airplanesRepository.UpdateAirplaneAsync(airplane);
+            await _airplanesRepository.UpdateAsync(airplane);
         }
     }
 }

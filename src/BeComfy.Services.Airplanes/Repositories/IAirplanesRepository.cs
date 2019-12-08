@@ -8,9 +8,9 @@ namespace BeComfy.Services.Airplanes.Repositories
     public interface IAirplanesRepository
     {
         Task AddAsync(Airplane airplane);
-        Task<Airplane> GetAirplaneAsync(Guid id);
-        Task<IEnumerable<Airplane>> BrowseAirplaneAsync(int pageSize, int page);
-        Task UpdateAirplaneAsync(Airplane airplane);
-        Task DeleteAirplaneAsync(Guid id);
+        Task<Airplane> GetAsync(Guid id);
+        Task<IEnumerable<Airplane>> BrowseAsync(int pageSize, int page, AirplaneStatus status);
+        Task UpdateAsync(Airplane airplane);
+        Task DeleteAsync(Guid id);
     }
 }
