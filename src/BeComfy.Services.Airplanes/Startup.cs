@@ -6,6 +6,7 @@ using BeComfy.Common.CqrsFlow;
 using BeComfy.Common.EFCore;
 using BeComfy.Common.Jaeger;
 using BeComfy.Common.RabbitMq;
+using BeComfy.Common.Serilog;
 using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Commands;
 using BeComfy.Services.Airplanes.Messages.Events;
@@ -53,6 +54,8 @@ namespace BeComfy.Services.Airplanes
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
+            
+            app.UseSerilog();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateAirplane>()
                 .SubscribeEvent<FlightCreated>(@namespace: "flights")
