@@ -23,7 +23,7 @@ namespace BeComfy.Services.Airplanes.EventHandlers
 
             if (airplane is null)
             {
-                throw new BeComfyException($"Airplane with id '{@event.AirplaneId}' does not exist");
+                throw new BeComfyException("cannot_create_flight", $"Cannot create flight, airplane with id: '{@event.AirplaneId}' does not exist");
             }
 
             airplane.SetNextFlight(@event.FlightStart);
