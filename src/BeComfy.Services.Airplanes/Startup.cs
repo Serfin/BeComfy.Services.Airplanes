@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using BeComfy.Common.Consul;
 using BeComfy.Common.CqrsFlow;
 using BeComfy.Common.EFCore;
 using BeComfy.Common.Jaeger;
@@ -10,10 +11,12 @@ using BeComfy.Common.Serilog;
 using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Commands;
 using BeComfy.Services.Airplanes.Messages.Events;
+using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace BeComfy.Services.Airplanes
 {
@@ -35,6 +38,7 @@ namespace BeComfy.Services.Airplanes
 
             services.AddJaeger();
             services.AddOpenTracing();
+            services.AddConsul();
             services.AddEFCoreContext<AirplanesContext>();
 
             var builder = new ContainerBuilder();
@@ -51,7 +55,8 @@ namespace BeComfy.Services.Airplanes
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IHostApplicationLifetime applicationLifetime, IConsulClient consulClient)
         {
             app.UseRouting();
             
@@ -65,6 +70,11 @@ namespace BeComfy.Services.Airplanes
             {
                 endpoints.MapControllers();
             });
+
+            var consulServiceId = app.UseConsul();
+            applicationLifetime.ApplicationStopped.Register(
+                () => consulClient.Agent.ServiceDeregister(consulServiceId)
+            );
         }
     }
 }
