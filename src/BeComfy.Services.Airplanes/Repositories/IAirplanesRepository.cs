@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using BeComfy.Services.Airplanes.Domain;
 
@@ -9,7 +10,8 @@ namespace BeComfy.Services.Airplanes.Repositories
     {
         Task AddAsync(Airplane airplane);
         Task<Airplane> GetAsync(Guid id);
-        Task<IEnumerable<Airplane>> BrowseAsync(int pageSize, int page, AirplaneStatus status);
+        Task<IEnumerable<Airplane>> BrowseAsync(int pageSize, int page);
+        Task<IEnumerable<Airplane>> BrowseAsync(int pageSize, int page, Expression<Func<Airplane, bool>> predicate);
         Task UpdateAsync(Airplane airplane);
         Task DeleteAsync(Guid id);
     }

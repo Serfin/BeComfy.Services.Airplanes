@@ -6,8 +6,10 @@ using BeComfy.Common.Consul;
 using BeComfy.Common.CqrsFlow;
 using BeComfy.Common.EFCore;
 using BeComfy.Common.Jaeger;
+using BeComfy.Common.Mongo;
 using BeComfy.Common.RabbitMq;
 using BeComfy.Common.Serilog;
+using BeComfy.Services.Airplanes.Domain;
 using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Commands;
 using BeComfy.Services.Airplanes.Messages.Events;
@@ -39,6 +41,8 @@ namespace BeComfy.Services.Airplanes
             services.AddJaeger();
             services.AddOpenTracing();
             services.AddConsul();
+            services.AddMongo();
+            services.AddMongoRepository<Airplane>("Airplanes");
             services.AddEFCoreContext<AirplanesContext>();
 
             var builder = new ContainerBuilder();

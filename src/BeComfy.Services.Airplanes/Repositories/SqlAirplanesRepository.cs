@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeComfy.Services.Airplanes.Repositories
 {
-    public class AirplanesRepository : IAirplanesRepository
+    public class AirplanesRepository // : IAirplanesRepository
     {
         private readonly AirplanesContext _context;
 
