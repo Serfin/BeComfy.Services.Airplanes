@@ -45,29 +45,11 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
 
         private CreateAirplane _command => new CreateAirplane(_id, _airplaneRegistraionNumber, _model, _availableSeats);
 
-        private async Task Ack(CreateAirplane command)
-            => await _commandHandler.HandleAsync(command, _correlationContext);
-
-        #endregion
-
-        #region Act/Assert
-
-        [Test]
-        public void empty_airplane_model_throws_domain_validation_exception()
+        private async Task TryHandle(CreateAirplane command)
         {
-            Assert.Throws<BeComfyDomainException>(() => _airplanesRepository.AddAsync(new Airplane(Guid.NewGuid(), 
-                _airplaneRegistraionNumber, "", _availableSeats)));
-        }
-
-        [Test]
-        public async Task failed_to_create_airplane_published_create_airplane_rejected()
-        {
-            _airplanesRepository.GetAsync(_airplaneRegistraionNumber)
-                .Returns(new Airplane(_id, _airplaneRegistraionNumber, _model, _availableSeats));
-
-            try 
+            try
             {
-                await Ack(_command);
+                await _commandHandler.HandleAsync(command, _correlationContext);
             }
             catch (Exception ex)
             {
@@ -78,6 +60,26 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
                         ), _correlationContext);
                 }
             }
+        }
+
+        #endregion
+
+        #region Act/Assert
+
+        [Test]
+        public void empty_airplane_model_throws_domain_validation_exception()
+        {
+            Assert.Throws<BeComfyException>(() => _airplanesRepository.AddAsync(new Airplane(Guid.NewGuid(), 
+                _airplaneRegistraionNumber, "", _availableSeats)), "airplane_empty_id", "Airplane id cannot be empty");
+        }
+
+        [Test]
+        public async Task failed_to_create_airplane_published_create_airplane_rejected()
+        {
+            _airplanesRepository.GetAsync(_airplaneRegistraionNumber)
+                .Returns(new Airplane(_id, _airplaneRegistraionNumber, _model, _availableSeats));
+
+            await TryHandle(_command);
 
             await _busPublisher
                 .Received()
