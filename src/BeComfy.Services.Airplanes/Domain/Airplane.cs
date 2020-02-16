@@ -11,6 +11,7 @@ namespace BeComfy.Services.Airplanes.Domain
     public class Airplane : IEntity
     {
         public Guid Id { get; private set; }
+        public string AirplaneRegistrationNumber { get; private set; }
         public string Model { get; private set; }
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public IDictionary<SeatClass, int> AvailableSeats { get; private set; }
@@ -21,10 +22,11 @@ namespace BeComfy.Services.Airplanes.Domain
         public DateTime IntroductionToTheFleet { get; private set; }
         public DateTime UpdatedAt { get; private set; }
     
-        public Airplane(Guid id, string model, 
+        public Airplane(Guid id, string airplaneRegistrationnumber, string model,
             IDictionary<SeatClass, int> availableSeats)
         {
-            Id = id;
+            SetAirplaneId(id);
+            SetAirplaneRegistrationNumber(airplaneRegistrationnumber);
             SetAirplaneModel(model);
             SetAvaiableSeats(availableSeats);
             AirplaneStatus = AirplaneStatus.Ready;
@@ -35,11 +37,31 @@ namespace BeComfy.Services.Airplanes.Domain
             UpdatedAt = DateTime.MinValue;
         }
 
+        private void SetAirplaneId(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new BeComfyException("airplane_empty_id", "Airplane id cannot be empty");
+            }
+
+            Id = id;
+        }
+
+        private void SetAirplaneRegistrationNumber(string airplaneRegistrationnumber)
+        {
+            if (string.IsNullOrEmpty(airplaneRegistrationnumber) || airplaneRegistrationnumber.Length == 0)
+            {
+                throw new BeComfyException("airplane_invalid_registration_number", "Airplane registration number has incorrect form or it is empty");
+            }
+
+            AirplaneRegistrationNumber = airplaneRegistrationnumber;
+        }
+
         private void SetAirplaneModel(string model)
         {
             if (string.IsNullOrWhiteSpace(model) || model.Length == 0)
             {
-                throw new BeComfyDomainException("Airplane model cannot be null or empty");
+                throw new BeComfyException("airplane_invalid_model", "Airplane model cannot be null or empty");
             }
 
             Model = model;

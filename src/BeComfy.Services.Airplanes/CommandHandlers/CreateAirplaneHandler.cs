@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using BeComfy.Common.CqrsFlow.Handlers;
 using BeComfy.Common.RabbitMq;
+using BeComfy.Common.Types.Exceptions;
 using BeComfy.Services.Airplanes.Domain;
 using BeComfy.Services.Airplanes.Messages.Commands;
 using BeComfy.Services.Airplanes.Messages.Events;
@@ -22,10 +23,16 @@ namespace BeComfy.Services.Airplanes.CommandHandlers
 
         public async Task HandleAsync(CreateAirplane command, ICorrelationContext context)
         {
-            var airplane = new Airplane(command.Id, command.Model, command.AvailableSeats);
+            if (await _airplanesRepository.GetAsync(command.AirplaneRegistrationNumber) != null)
+            {
+                throw new BeComfyException("airplane_already_exists",
+                    $"Airplane with registration number: '{command.AirplaneRegistrationNumber}' already exists.");
+            }
+
+            var airplane = new Airplane(command.Id, command.AirplaneRegistrationNumber, command.Model, command.AvailableSeats);
 
             await _airplanesRepository.AddAsync(airplane);
-            await _busPublisher.PublishAsync(new AirplaneCreated(command.Id, command.Model), context);
+            await _busPublisher.PublishAsync(new AirplaneCreated(command.Id, command.AirplaneRegistrationNumber, command.Model), context);
         }
     }
 }

@@ -67,7 +67,7 @@ namespace BeComfy.Services.Airplanes
             app.UseSerilog();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateAirplane>(
-                    onError: (cmd, ex) => new CreateAirplaneRejected(cmd.Id, cmd.Model, ex.Code, ex.Message))
+                    onError: (cmd, ex) => new CreateAirplaneRejected(cmd.Id, cmd.AirplaneRegistrationNumber, cmd.Model, ex.Code, ex.Message))
                 .SubscribeEvent<FlightCreated>(@namespace: "flights")
                 .SubscribeEvent<FlightEnded>(@namespace: "flights");
             
