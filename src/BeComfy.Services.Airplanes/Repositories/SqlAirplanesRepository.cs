@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BeComfy.Common.Types.Enums;
 using BeComfy.Services.Airplanes.Domain;
 using BeComfy.Services.Airplanes.EF;
 using Microsoft.EntityFrameworkCore;

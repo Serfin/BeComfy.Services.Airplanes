@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using BeComfy.Common.CqrsFlow;
-using BeComfy.Services.Airplanes.Domain;
+using BeComfy.Common.Types.Enums;
 using BeComfy.Services.Airplanes.Dto;
 
 namespace BeComfy.Services.Airplanes.Queries

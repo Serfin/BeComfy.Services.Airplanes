@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using BeComfy.Common.CqrsFlow.Handlers;
 using BeComfy.Common.RabbitMq;
+using BeComfy.Common.Types.Enums;
 using BeComfy.Common.Types.Exceptions;
 using BeComfy.Services.Airplanes.Messages.Events;
 using BeComfy.Services.Airplanes.Repositories;
@@ -28,7 +29,7 @@ namespace BeComfy.Services.Airplanes.EventHandlers
             airplane.IncreaseFlightsCarriedOut();
             airplane.SetNextFlight(DateTime.MinValue);
             airplane.SetFlightEnd(DateTime.MinValue);
-            airplane.SetAirplaneStatus(Domain.AirplaneStatus.Ready);
+            airplane.SetAirplaneStatus(AirplaneStatus.Ready);
 
             await _airplanesRepository.UpdateAsync(airplane);
         }

@@ -13,7 +13,8 @@ namespace BeComfy.Services.Airplanes.Messages.Events
         public string Reason { get; }
 
         [JsonConstructor]
-        public CreateAirplaneRejected(Guid id, string airplaneRegistrationNumber, string model, string code, string reason)
+        public CreateAirplaneRejected(Guid id, string airplaneRegistrationNumber, string model, 
+            string code, string reason)
         {
             Id = id;
             AirplaneRegistrationNumber = airplaneRegistrationNumber;
