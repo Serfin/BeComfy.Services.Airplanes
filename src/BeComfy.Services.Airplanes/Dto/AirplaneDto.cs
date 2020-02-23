@@ -1,5 +1,6 @@
 using System;
-using BeComfy.Services.Airplanes.Domain;
+using System.Collections.Generic;
+using BeComfy.Common.Types.Enums;
 
 namespace BeComfy.Services.Airplanes.Dto
 {
@@ -7,7 +8,9 @@ namespace BeComfy.Services.Airplanes.Dto
     {
         public Guid Id { get; set; }
         public string Model { get; set; }
+        public string AirplaneRegistrationNumber { get; set; }
         public AirplaneStatus AirplaneStatus { get; set; }
+        public IDictionary<SeatClass, int> AvailableSeats { get; set; }
         public DateTime? NextFlight { get; set; }
         public DateTime? FlightEnd { get; set; }
     }

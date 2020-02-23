@@ -25,7 +25,9 @@ namespace BeComfy.Services.Airplanes.QueryHandlers
                 {
                     Id = airplane.Id,
                     Model = airplane.Model,
+                    AirplaneRegistrationNumber = airplane.AirplaneRegistrationNumber,
                     AirplaneStatus = airplane.AirplaneStatus,
+                    AvailableSeats = airplane.AvailableSeats,
                     NextFlight = airplane.NextFlight,
                     FlightEnd = airplane.FlightEnd
                 };
