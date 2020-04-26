@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BeComfy.Common.Mongo;
 using BeComfy.Common.Types.Enums;
 using BeComfy.Common.Types.Exceptions;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 

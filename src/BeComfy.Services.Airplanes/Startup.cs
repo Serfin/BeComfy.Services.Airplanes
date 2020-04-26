@@ -8,7 +8,7 @@ using BeComfy.Common.EFCore;
 using BeComfy.Common.Jaeger;
 using BeComfy.Common.Mongo;
 using BeComfy.Common.RabbitMq;
-using BeComfy.Common.Serilog;
+using BeComfy.Logging.Elk;
 using BeComfy.Services.Airplanes.Domain;
 using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Commands;
@@ -63,8 +63,7 @@ namespace BeComfy.Services.Airplanes
             IHostApplicationLifetime applicationLifetime, IConsulClient consulClient)
         {
             app.UseRouting();
-            
-            app.UseSerilog();
+
             app.UseRabbitMq()
                 .SubscribeCommand<CreateAirplane>(
                     onError: (cmd, ex) => new CreateAirplaneRejected(cmd.Id, cmd.AirplaneRegistrationNumber, cmd.Model, ex.Code, ex.Message))
