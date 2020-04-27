@@ -8,7 +8,6 @@ using BeComfy.Common.EFCore;
 using BeComfy.Common.Jaeger;
 using BeComfy.Common.Mongo;
 using BeComfy.Common.RabbitMq;
-using BeComfy.Logging.Elk;
 using BeComfy.Services.Airplanes.Domain;
 using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Commands;
