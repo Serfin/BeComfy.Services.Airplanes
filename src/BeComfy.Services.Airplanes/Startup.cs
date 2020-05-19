@@ -8,6 +8,7 @@ using BeComfy.Common.EFCore;
 using BeComfy.Common.Jaeger;
 using BeComfy.Common.Mongo;
 using BeComfy.Common.RabbitMq;
+//using BeComfy.MessageBroker.RabbitMQ;
 using BeComfy.Services.Airplanes.Domain;
 using BeComfy.Services.Airplanes.EF;
 using BeComfy.Services.Airplanes.Messages.Commands;
@@ -41,14 +42,16 @@ namespace BeComfy.Services.Airplanes
             services.AddOpenTracing();
             services.AddConsul();
             services.AddMongo();
+            //services.AddRabbitMq();
             services.AddMongoRepository<Airplane>("Airplanes");
             services.AddEFCoreContext<AirplanesContext>();
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                 .AsImplementedInterfaces();
-            builder.Populate(services);
+
             builder.AddRabbitMq();
+            builder.Populate(services);
             builder.AddHandlers();
             builder.AddDispatcher();
 
@@ -64,10 +67,8 @@ namespace BeComfy.Services.Airplanes
             app.UseRouting();
 
             app.UseRabbitMq()
-                .SubscribeCommand<CreateAirplane>(
-                    onError: (cmd, ex) => new CreateAirplaneRejected(cmd.Id, cmd.AirplaneRegistrationNumber, cmd.Model, ex.Code, ex.Message))
-                .SubscribeEvent<FlightCreated>(@namespace: "flights")
-                .SubscribeEvent<FlightEnded>(@namespace: "flights");
+                .SubscribeCommand<CreateAirplane>();
+                //.ConsumeMessage<CreateAirplane>();
             
             app.UseEndpoints(endpoints => 
             {
