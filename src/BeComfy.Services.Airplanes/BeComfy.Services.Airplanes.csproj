@@ -6,17 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BeComfy.Common.Libraries\src\BeComfy.Common\BeComfy.Common.csproj" />
-    <ProjectReference Include="..\..\..\BeComfy.Common.Libraries\src\BeComfy.Logging\BeComfy.Logging.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     
       <!-- Must target netcore3.0 -->
+    <PackageReference Include="BeComfy.Common" Version="0.0.1" />
+    <PackageReference Include="BeComfy.Logging" Version="0.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <PackageReference Include="OpenTracing.Contrib.NetCore" Version="0.6.2" />
   </ItemGroup>
