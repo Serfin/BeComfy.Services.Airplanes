@@ -16,6 +16,8 @@ namespace BeComfy.Services.Airplanes.Domain
         public string Model { get; private set; }
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public IDictionary<SeatClass, int> AvailableSeats { get; private set; }
+        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        public IDictionary<EmployeePosition, int> RequiredCrew { get; private set; }
         public AirplaneStatus AirplaneStatus { get; private set; }
         public int FlightsCarriedOut { get; private set; }
         public DateTime? NextFlight { get; private set; }
@@ -24,12 +26,13 @@ namespace BeComfy.Services.Airplanes.Domain
         public DateTime UpdatedAt { get; private set; }
     
         public Airplane(Guid id, string airplaneRegistrationnumber, string model,
-            IDictionary<SeatClass, int> availableSeats)
+            IDictionary<SeatClass, int> availableSeats, IDictionary<EmployeePosition, int> requiredCrew)
         {
             SetAirplaneId(id);
             SetAirplaneRegistrationNumber(airplaneRegistrationnumber);
             SetAirplaneModel(model);
             SetAvaiableSeats(availableSeats);
+            SetRequiredCrew(requiredCrew);
             AirplaneStatus = AirplaneStatus.Ready;
             FlightsCarriedOut = 0;
             NextFlight = DateTime.MinValue;
@@ -70,22 +73,49 @@ namespace BeComfy.Services.Airplanes.Domain
 
         private void SetAvaiableSeats(IDictionary<SeatClass, int> availableSeats)
         {
+            if (availableSeats == null)
+            {
+                throw new BeComfyDomainException("Airplane/AvailableSeats cannot be null");
+            }
+
             if (availableSeats.Count <= 0)
             {
                 throw new BeComfyDomainException("Count of seatsClass cannot be less or equal to 0");
             }
 
-            if (GetSeatsCount(availableSeats) <= 0)
+            if (GetSumOfDictionaryValue(availableSeats) <= 0)
             {
                 throw new BeComfyDomainException("Count of available seats cannot be less or equal to 0");
             }
 
             AvailableSeats = availableSeats;
-            SetUpdateDate();
+        }
+
+        private void SetRequiredCrew(IDictionary<EmployeePosition, int> requiredCrew)
+        {
+            if (requiredCrew == null)
+            {
+                throw new BeComfyDomainException("Airplane/RequiredCrew cannot be null");            
+            }
+
+            if (requiredCrew.Count <= 0 )
+            {
+                throw new BeComfyDomainException("Required crew cannot be less or equal to 0!");
+            }
+
+            if (GetSumOfDictionaryValue(requiredCrew) <= 0)
+            {
+                throw new BeComfyDomainException("Count of employees in required crew cannot be less or equal to 0");
+            }
+
+            RequiredCrew = requiredCrew;
         }
 
         public void SetAirplaneStatus(AirplaneStatus airplaneStatus)
-            => AirplaneStatus = airplaneStatus;
+        {
+            AirplaneStatus = airplaneStatus;
+            SetUpdateDate();
+        }
 
         public void SetNextFlight(DateTime? flightStart)
         {
@@ -115,15 +145,15 @@ namespace BeComfy.Services.Airplanes.Domain
             SetUpdateDate();
         }
 
-        private int GetSeatsCount(IDictionary<SeatClass, int> seats)
+        private int GetSumOfDictionaryValue<T>(IDictionary<T, int> dictionary)
         {
-            int seatsCounter = 0;
-            foreach (var seatClass in seats)
+            int valueCounter = 0;
+            foreach (var dictionaryEntry in dictionary)
             {
-                seatsCounter += seatClass.Value;
+                valueCounter += dictionaryEntry.Value;
             }
 
-            return seatsCounter;
+            return valueCounter;
         }
 
         public void IncreaseFlightsCarriedOut() 

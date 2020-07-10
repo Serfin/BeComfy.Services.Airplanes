@@ -43,7 +43,13 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
             { SeatClass.Business, 15 }
         };
 
-        private CreateAirplane _command => new CreateAirplane(_id, _airplaneRegistraionNumber, _model, _availableSeats);
+        private IDictionary<EmployeePosition, int> _requiredCrew = new Dictionary<EmployeePosition, int>
+        {
+            { EmployeePosition.Pilot, 2 },
+            { EmployeePosition.Staff, 15 }
+        };
+
+        private CreateAirplane _command => new CreateAirplane(_id, _airplaneRegistraionNumber, _model, _availableSeats, _requiredCrew);
 
         #endregion
 
@@ -53,14 +59,14 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
         public void empty_airplane_model_throws_domain_validation_exception()
         {
             Assert.Throws<BeComfyException>(() => _airplanesRepository.AddAsync(new Airplane(Guid.NewGuid(), 
-                _airplaneRegistraionNumber, "", _availableSeats)), "airplane_empty_id", "Airplane id cannot be empty");
+                _airplaneRegistraionNumber, "", _availableSeats, _requiredCrew)), "airplane_empty_id", "Airplane id cannot be empty");
         }
 
         [Test]
         public async Task create_airplane_on_failure_published_create_airplane_rejected()
         {
             _airplanesRepository.GetAsync(_airplaneRegistraionNumber)
-                .Returns(new Airplane(_id, _airplaneRegistraionNumber, _model, _availableSeats));
+                .Returns(new Airplane(_id, _airplaneRegistraionNumber, _model, _availableSeats, _requiredCrew));
 
             try
             {
@@ -70,8 +76,8 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
             {
                 if (ex is BeComfyException)
                 {
-                    await _busPublisher.PublishAsync(new CreateAirplaneRejected(_command.Id, _command.AirplaneRegistrationNumber,
-                        _command.Model, "airplane_already_exists", $"Airplane with registration number: '{_command.AirplaneRegistrationNumber}' already exists."
+                    await _busPublisher.PublishAsync(new CreateAirplaneRejected(_command.AirplaneId, _command.AirplaneRegistrationNumber,
+                        _command.AirplaneModel, "airplane_already_exists", $"Airplane with registration number: '{_command.AirplaneRegistrationNumber}' already exists."
                         ), _correlationContext);
                 }
             }
@@ -79,7 +85,7 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
             await _busPublisher
                 .Received()
                 .PublishAsync(Arg.Is<CreateAirplaneRejected>(e =>
-                    e.Id == _command.Id
+                    e.Id == _command.AirplaneId
                     && e.AirplaneRegistrationNumber == _command.AirplaneRegistrationNumber
                     && e.Code == "airplane_already_exists"
                     && e.Reason == $"Airplane with registration number: '{_command.AirplaneRegistrationNumber}' already exists."
@@ -98,9 +104,9 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
             await _busPublisher
                 .Received()
                 .PublishAsync(Arg.Is<AirplaneCreated>(e =>
-                    e.Id == _command.Id && 
+                    e.Id == _command.AirplaneId && 
                     e.AirplaneRegistrationNumber == _command.AirplaneRegistrationNumber && 
-                    e.Model == _command.Model), _correlationContext);
+                    e.Model == _command.AirplaneModel), _correlationContext);
         }
 
         #endregion

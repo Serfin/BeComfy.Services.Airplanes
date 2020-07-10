@@ -11,6 +11,7 @@ namespace BeComfy.Services.Airplanes.Dto
         public string AirplaneRegistrationNumber { get; set; }
         public AirplaneStatus AirplaneStatus { get; set; }
         public IDictionary<SeatClass, int> AvailableSeats { get; set; }
+        public IDictionary<EmployeePosition, int> RequiredSeats { get; set; }
         public DateTime? NextFlight { get; set; }
         public DateTime? FlightEnd { get; set; }
     }

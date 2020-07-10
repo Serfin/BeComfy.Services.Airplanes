@@ -24,7 +24,8 @@ namespace BeComfy.Services.Airplanes.EventHandlers
 
             if (airplane is null)
             {
-                throw new BeComfyException("cannot_create_flight", $"Cannot create flight, airplane with id: '{@event.AirplaneId}' does not exist");
+                throw new BeComfyException("cannot_create_flight", 
+                    $"Cannot create flight, airplane with id: '{@event.AirplaneId}' does not exist");
             }
 
             airplane.SetNextFlight(@event.FlightStart);
@@ -32,6 +33,9 @@ namespace BeComfy.Services.Airplanes.EventHandlers
             airplane.SetAirplaneStatus(AirplaneStatus.Reserved);
 
             await _airplanesRepository.UpdateAsync(airplane);
+            await _busPublisher.PublishAsync(new AirplaneReserved(airplane.Id, @event.FlightId,
+                airplane.RequiredCrew), context);
+
         }
     }
 }

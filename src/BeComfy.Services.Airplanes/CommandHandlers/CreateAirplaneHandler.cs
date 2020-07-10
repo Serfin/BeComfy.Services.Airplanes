@@ -29,10 +29,11 @@ namespace BeComfy.Services.Airplanes.CommandHandlers
                     $"Airplane with registration number: '{command.AirplaneRegistrationNumber}' already exists.");
             }
 
-            var airplane = new Airplane(command.Id, command.AirplaneRegistrationNumber, command.Model, command.AvailableSeats);
+            var airplane = new Airplane(command.AirplaneId, command.AirplaneRegistrationNumber, command.AirplaneModel, command.AvailableSeats,
+                command.RequiredCrew);
 
             await _airplanesRepository.AddAsync(airplane);
-            await _busPublisher.PublishAsync(new AirplaneCreated(command.Id, command.AirplaneRegistrationNumber, command.Model), context);
+            await _busPublisher.PublishAsync(new AirplaneCreated(command.AirplaneId, command.AirplaneRegistrationNumber, command.AirplaneModel), context);
         }
     }
 }
