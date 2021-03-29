@@ -35,7 +35,6 @@ namespace BeComfy.Services.Airplanes.EventHandlers
             await _airplanesRepository.UpdateAsync(airplane);
             await _busPublisher.PublishAsync(new AirplaneReserved(airplane.Id, @event.FlightId,
                 airplane.RequiredCrew), context);
-
         }
     }
 }

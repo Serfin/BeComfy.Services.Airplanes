@@ -63,7 +63,7 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
         }
 
         [Test]
-        public async Task create_airplane_on_failure_published_create_airplane_rejected()
+        public async Task create_airplane_with_existing_registration_number_failed_published_create_airplane_rejected()
         {
             _airplanesRepository.GetAsync(_airplaneRegistraionNumber)
                 .Returns(new Airplane(_id, _airplaneRegistraionNumber, _model, _availableSeats, _requiredCrew));
@@ -76,8 +76,9 @@ namespace BeComfy.Services.Airplanes.Tests.CommandHandlers
             {
                 if (ex is BeComfyException)
                 {
-                    await _busPublisher.PublishAsync(new CreateAirplaneRejected(_command.AirplaneId, _command.AirplaneRegistrationNumber,
-                        _command.AirplaneModel, "airplane_already_exists", $"Airplane with registration number: '{_command.AirplaneRegistrationNumber}' already exists."
+                    await _busPublisher.PublishAsync(new CreateAirplaneRejected(_command.AirplaneId, 
+                        _command.AirplaneRegistrationNumber, _command.AirplaneModel, "airplane_already_exists", 
+                        $"Airplane with registration number: '{_command.AirplaneRegistrationNumber}' already exists."
                         ), _correlationContext);
                 }
             }
